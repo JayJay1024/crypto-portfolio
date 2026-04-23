@@ -4,6 +4,7 @@ import { SiweMessage } from "siwe"
 import { prisma } from "@/lib/prisma"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "Arbitrum",
