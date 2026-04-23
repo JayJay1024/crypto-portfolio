@@ -1,9 +1,9 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect, useRef } from "react"
 import { WagmiProvider } from "wagmi"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { SessionProvider, getCsrfToken, signIn, signOut } from "next-auth/react"
+import { SessionProvider, signIn, signOut } from "next-auth/react"
 import {
   RainbowKitAuthenticationProvider,
   RainbowKitProvider,
@@ -12,6 +12,7 @@ import {
   lightTheme,
 } from "@rainbow-me/rainbowkit"
 import { useTheme } from "next-themes"
+import { usePathname, useRouter } from "next/navigation"
 import { createSiweMessage } from "viem/siwe"
 import { config } from "@/lib/wagmi"
 import { useSession } from "next-auth/react"
@@ -21,6 +22,21 @@ import "@rainbow-me/rainbowkit/styles.css"
 function RainbowKitWithAuth({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useTheme()
   const { status } = useSession()
+  const router = useRouter()
+  const pathname = usePathname()
+  const prevStatus = useRef(status)
+
+  useEffect(() => {
+    if (prevStatus.current === status) return
+    prevStatus.current = status
+
+    if (status === "authenticated" && pathname === "/login") {
+      router.replace("/dashboard")
+    }
+    if (status === "unauthenticated" && pathname.startsWith("/dashboard")) {
+      router.replace("/login")
+    }
+  }, [status, pathname, router])
 
   const authAdapter = useMemo(
     () =>
@@ -42,11 +58,9 @@ function RainbowKitWithAuth({ children }: { children: React.ReactNode }) {
           })
         },
         verify: async ({ message, signature }) => {
-          const csrfToken = await getCsrfToken()
           const res = await signIn("credentials", {
             message: JSON.stringify(message),
             signature,
-            csrfToken,
             redirect: false,
           })
           return res?.ok ?? false
