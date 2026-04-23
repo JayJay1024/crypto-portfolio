@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String        @id @default(cuid())
+  walletAddress String        @unique @map("wallet_address")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  transactions  Transaction[]
+
+  @@map("users")
+}
+
+enum TransactionType {
+  BUY
+  SELL
+}
+
+enum FeeUnit {
+  USDT
+  CRYPTO
+}
+
+enum Exchange {
+  BINANCE
+  OKX
+  GATE
+  BITGET
+  CUSTOM
+}
+
+model Transaction {
+  id             String          @id @default(cuid())
+  userId         String          @map("user_id")
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  coinId         String          @map("coin_id")
+  coinSymbol     String          @map("coin_symbol")
+  coinName       String          @map("coin_name")
+
+  type           TransactionType
+  exchange       Exchange        @default(BINANCE)
+  exchangeCustom String?         @map("exchange_custom")
+
+  quantity       Decimal         @db.Decimal(30, 18)
+  price          Decimal         @db.Decimal(30, 18)
+  date           DateTime        @db.Date
+
+  fee            Decimal         @default(0) @db.Decimal(30, 18)
+  feeUnit        FeeUnit         @default(USDT) @map("fee_unit")
+
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([userId, coinId])
+  @@index([userId, coinId, type])
+  @@map("transactions")
+}
