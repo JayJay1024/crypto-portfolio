@@ -10,7 +10,10 @@ export function toBig(value: string | number | Big): Big {
 }
 
 export function formatBig(value: Big, dp: number = 2): string {
-  return value.toFixed(dp)
+  const fixed = value.toFixed(dp)
+  const [intPart, decPart] = fixed.split(".")
+  const formatted = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  return decPart !== undefined ? `${formatted}.${decPart}` : formatted
 }
 
 export function safeDivide(numerator: Big, denominator: Big): Big {
