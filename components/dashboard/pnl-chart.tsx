@@ -45,7 +45,7 @@ export function PnlChart({ coins, prices }: PnlChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">P&L by Coin</CardTitle>
+          <CardTitle className="text-base">PnL by Coin</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex h-[200px] items-center justify-center text-sm text-muted-foreground">
@@ -59,7 +59,7 @@ export function PnlChart({ coins, prices }: PnlChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">P&L by Coin</CardTitle>
+        <CardTitle className="text-base">PnL by Coin</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={250}>
@@ -70,7 +70,7 @@ export function PnlChart({ coins, prices }: PnlChartProps) {
             <Tooltip
               formatter={(value) => [
                 `$${formatBig(new Big(Number(value ?? 0)), 2)}`,
-                "P&L",
+                "PnL",
               ]}
             />
             <Bar dataKey="pnl" radius={[4, 4, 0, 0]}>

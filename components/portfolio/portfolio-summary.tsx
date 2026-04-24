@@ -54,7 +54,7 @@ export function PortfolioSummary({ coins, prices }: PortfolioSummaryProps) {
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Unrealized P&L
+            Unrealized PnL
           </CardTitle>
         </CardHeader>
         <CardContent>

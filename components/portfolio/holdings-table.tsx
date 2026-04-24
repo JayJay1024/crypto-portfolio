@@ -41,8 +41,8 @@ export function HoldingsTable({ coins, prices }: HoldingsTableProps) {
             <TableHead className="text-right">Cost Price</TableHead>
             <TableHead className="text-right">Current Price</TableHead>
             <TableHead className="text-right">Value</TableHead>
-            <TableHead className="text-right">P&L</TableHead>
-            <TableHead className="text-right">P&L %</TableHead>
+            <TableHead className="text-right">PnL</TableHead>
+            <TableHead className="text-right">PnL %</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
