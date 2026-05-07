@@ -9,13 +9,13 @@ interface CoinStatsCardProps {
 }
 
 export function CoinStatsCard({ stats }: CoinStatsCardProps) {
-  const rows = [
+  const remaining = toBig(stats.remainingHoldings)
+  const isFullySold = remaining.eq(0)
+
+  const rows: { label: string; value: string; className?: string }[] = [
     { label: "Total Bought", value: formatBig(toBig(stats.totalBuyQty), 8) },
     { label: "Total Sold", value: formatBig(toBig(stats.totalSellQty), 8) },
-    {
-      label: "Remaining",
-      value: formatBig(toBig(stats.remainingHoldings), 8),
-    },
+    { label: "Remaining", value: formatBig(remaining, 8) },
     {
       label: "Total Buy Cost",
       value: `$${formatBig(toBig(stats.totalBuyCost), 2)}`,
@@ -38,6 +38,18 @@ export function CoinStatsCard({ stats }: CoinStatsCardProps) {
     },
   ]
 
+  if (isFullySold) {
+    const realizedPnl = toBig(stats.totalSellRevenue).minus(
+      toBig(stats.totalBuyCost)
+    )
+    const isPositive = realizedPnl.gte(0)
+    rows.push({
+      label: "Realized PnL",
+      value: `${isPositive ? "+" : ""}$${formatBig(realizedPnl, 2)}`,
+      className: isPositive ? "text-green-500" : "text-red-500",
+    })
+  }
+
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -53,7 +65,9 @@ export function CoinStatsCard({ stats }: CoinStatsCardProps) {
           {rows.map((row) => (
             <div key={row.label} className="flex justify-between">
               <dt className="text-muted-foreground">{row.label}</dt>
-              <dd className="font-medium">{row.value}</dd>
+              <dd className={`font-medium ${row.className ?? ""}`}>
+                {row.value}
+              </dd>
             </div>
           ))}
         </dl>
