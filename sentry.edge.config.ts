@@ -5,12 +5,16 @@
 
 import * as Sentry from "@sentry/nextjs"
 
-Sentry.init({
-  dsn: "https://b5b7a92bdd727e45af2829dbb32d14ad@o4511365478678528.ingest.us.sentry.io/4511365583077376",
+const dsn = process.env.SENTRY_DSN
 
-  tracesSampleRate: process.env.NODE_ENV === "development" ? 1.0 : 0.1,
+if (dsn) {
+  Sentry.init({
+    dsn,
 
-  enableLogs: true,
+    tracesSampleRate: process.env.NODE_ENV === "development" ? 1.0 : 0.1,
 
-  sendDefaultPii: false,
-})
+    enableLogs: true,
+
+    sendDefaultPii: false,
+  })
+}

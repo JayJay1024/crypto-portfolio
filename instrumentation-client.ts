@@ -4,35 +4,39 @@
 
 import * as Sentry from "@sentry/nextjs"
 
-Sentry.init({
-  dsn: "https://b5b7a92bdd727e45af2829dbb32d14ad@o4511365478678528.ingest.us.sentry.io/4511365583077376",
+const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN
 
-  integrations: [
-    // Wallet addresses, balances, and SIWE messages may render in DOM —
-    // mask all text and block media to keep replays free of on-chain PII
-    Sentry.replayIntegration({
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-  ],
+if (dsn) {
+  Sentry.init({
+    dsn,
 
-  tracesSampleRate: process.env.NODE_ENV === "development" ? 1.0 : 0.1,
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0,
+    integrations: [
+      // Wallet addresses, balances, and SIWE messages may render in DOM —
+      // mask all text and block media to keep replays free of on-chain PII
+      Sentry.replayIntegration({
+        maskAllText: true,
+        blockAllMedia: true,
+      }),
+    ],
 
-  enableLogs: true,
+    tracesSampleRate: process.env.NODE_ENV === "development" ? 1.0 : 0.1,
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
 
-  sendDefaultPii: false,
+    enableLogs: true,
 
-  // wagmi/RainbowKit surface user-cancelled wallet prompts as thrown errors;
-  // they are expected UX, not bugs
-  ignoreErrors: [
-    "UserRejectedRequestError",
-    "User rejected the request",
-    "User denied transaction signature",
-    "User rejected transaction",
-    "ConnectorNotFoundError",
-  ],
-})
+    sendDefaultPii: false,
+
+    // wagmi/RainbowKit surface user-cancelled wallet prompts as thrown errors;
+    // they are expected UX, not bugs
+    ignoreErrors: [
+      "UserRejectedRequestError",
+      "User rejected the request",
+      "User denied transaction signature",
+      "User rejected transaction",
+      "ConnectorNotFoundError",
+    ],
+  })
+}
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart

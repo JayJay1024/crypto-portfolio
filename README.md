@@ -25,6 +25,7 @@ and per-coin PnL backed by CoinGecko prices.
 - **Math** — `big.js` for safe decimal arithmetic
 - **Charts** — Recharts
 - **Prices** — CoinGecko API (proxied through `/api/coins/*`)
+- **Monitoring** — Sentry (optional; opt-in via `NEXT_PUBLIC_SENTRY_DSN` / `SENTRY_DSN`)
 
 ## Getting Started
 
@@ -50,6 +51,9 @@ Arbitrum to sign in.
 | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnect Cloud project ID |
 | `COINGECKO_API_KEY` | Optional, increases rate limit |
 | `COINGECKO_BASE_URL` | Defaults to `https://api.coingecko.com/api/v3` |
+| `NEXT_PUBLIC_SENTRY_DSN` | Optional. Browser DSN; leave blank to disable client error monitoring |
+| `SENTRY_DSN` | Optional. Server / edge runtime DSN; usually the same value as `NEXT_PUBLIC_SENTRY_DSN` |
+| `SENTRY_AUTH_TOKEN` | Build-time only. Required to upload source maps; set in CI / `.env.sentry-build-plugin` |
 
 ## Scripts
 
