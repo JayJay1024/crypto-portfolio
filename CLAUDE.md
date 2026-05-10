@@ -40,6 +40,11 @@ Next.js 16 app router project with React 19, TypeScript (strict), and Tailwind C
 - **CoinGecko** — Always go through the `/api/coins/*` proxy. Do not fetch CoinGecko from the client (API key + CORS).
 - **Auth** — NextAuth v5 + SIWE (Sign-In with Ethereum). The auth adapter lives in `components/providers.tsx` (`RainbowKitAuthenticationProvider` + `createAuthenticationAdapter`). Treat auth changes as SIWE-specific, not generic OAuth/credentials.
 - **State split** — Server data → TanStack Query (`hooks/use-*.ts`). Client UI state → Zustand (`lib/stores/`). Forms → React Hook Form + Zod (`lib/validations/`).
+- **Sentry** — Opt-in: `Sentry.init` in `instrumentation-client.ts` / `sentry.{server,edge}.config.ts` only runs when `NEXT_PUBLIC_SENTRY_DSN` / `SENTRY_DSN` are set. If "Sentry isn't capturing events" — check env first. Several config choices are deliberate, not oversights:
+  - `sendDefaultPii: false` on all runtimes — wallet addresses / SIWE messages / IPs are PII; do not flip to `true`
+  - Client `ignoreErrors` filters wagmi/RainbowKit user-rejection errors (cancelled signatures aren't bugs); don't remove
+  - Server `beforeSend` drops CoinGecko 429s (upstream throttle, not actionable); don't remove
+  - Replay runs with `maskAllText` + `blockAllMedia` — don't relax without thinking through what gets recorded
 
 ## Styling
 
