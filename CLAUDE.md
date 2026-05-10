@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 pnpm dev          # Start dev server (Next.js + Turbopack)
-pnpm build        # Production build
+pnpm build        # Production build (runs `prisma generate` first)
 pnpm lint         # ESLint
 pnpm format       # Prettier (ts, tsx files)
 pnpm typecheck    # TypeScript type checking (tsc --noEmit)
@@ -16,15 +16,30 @@ Package manager is **pnpm**. Do not use npm or yarn.
 
 Add shadcn components with: `npx shadcn@latest add <component>`
 
+After editing `prisma/schema.prisma`, run `pnpm prisma migrate dev` (or `migrate deploy` in CI) and `pnpm prisma generate`.
+
 ## Architecture
 
 Next.js 16 app router project with React 19, TypeScript (strict), and Tailwind CSS 4.
 
 - `app/` — Routes, layouts, pages (server components by default; mark client components with `"use client"`)
+- `app/api/` — Route handlers: `auth/` (NextAuth + SIWE nonce), `coins/` (CoinGecko proxy), `portfolio/`, `transactions/`
 - `components/ui/` — shadcn/ui components (Radix-based, CVA variants)
-- `components/` — Custom app-level components
-- `hooks/` — Custom React hooks
+- `components/{layout,dashboard,portfolio,transactions}/` — feature-grouped app components
+- `hooks/` — TanStack Query hooks for server data (`use-transactions`, `use-portfolio-stats`, `use-coin-prices`)
 - `lib/utils.ts` — `cn()` helper (clsx + tailwind-merge)
+- `lib/big.ts` — `big.js` wrappers (`Big`, `toBig`, `safeDivide`, `clampZero`)
+- `lib/calculations.ts` — Single source of truth for PnL / cost basis math
+- `lib/stores/` — Zustand stores for client-only UI state (e.g. `ui-store.ts`)
+- `lib/wagmi.ts` — Single chain: Arbitrum
+- `prisma/schema.prisma` — Postgres via `@prisma/adapter-pg`; models: `User`, `Transaction`
+
+## Conventions
+
+- **Decimal math** — Money and quantity values are strings; do all arithmetic with `big.js` via `lib/big.ts`. Never convert to JS `Number` before computation (precision loss).
+- **CoinGecko** — Always go through the `/api/coins/*` proxy. Do not fetch CoinGecko from the client (API key + CORS).
+- **Auth** — NextAuth v5 + SIWE (Sign-In with Ethereum). The auth adapter lives in `components/providers.tsx` (`RainbowKitAuthenticationProvider` + `createAuthenticationAdapter`). Treat auth changes as SIWE-specific, not generic OAuth/credentials.
+- **State split** — Server data → TanStack Query (`hooks/use-*.ts`). Client UI state → Zustand (`lib/stores/`). Forms → React Hook Form + Zod (`lib/validations/`).
 
 ## Styling
 
