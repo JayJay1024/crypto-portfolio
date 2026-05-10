@@ -1,4 +1,10 @@
+import type { Metadata } from "next"
 import { WalletButton } from "@/components/layout/wallet-button"
+
+export const metadata: Metadata = {
+  title: "Sign in",
+  description: "Connect your wallet to access your portfolio.",
+}
 
 export default function LoginPage() {
   return (
