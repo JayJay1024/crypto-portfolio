@@ -2,8 +2,8 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { ThemeToggle } from "@/components/layout/theme-toggle"
+import { WalletButton } from "@/components/layout/wallet-button"
 import { cn } from "@/lib/utils"
 
 const navItems = [
@@ -40,11 +40,7 @@ export function Header() {
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <ConnectButton
-            accountStatus="address"
-            chainStatus="icon"
-            showBalance={false}
-          />
+          <WalletButton />
         </div>
       </div>
     </header>

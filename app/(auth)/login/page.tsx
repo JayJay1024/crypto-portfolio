@@ -1,4 +1,4 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit"
+import { WalletButton } from "@/components/layout/wallet-button"
 
 export default function LoginPage() {
   return (
@@ -12,7 +12,7 @@ export default function LoginPage() {
             Connect your wallet to get started
           </p>
         </div>
-        <ConnectButton />
+        <WalletButton size="lg" className="px-6 text-base" />
       </div>
     </div>
   )
