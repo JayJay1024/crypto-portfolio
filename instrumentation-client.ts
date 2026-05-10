@@ -7,25 +7,32 @@ import * as Sentry from "@sentry/nextjs"
 Sentry.init({
   dsn: "https://b5b7a92bdd727e45af2829dbb32d14ad@o4511365478678528.ingest.us.sentry.io/4511365583077376",
 
-  // Add optional integrations for additional features
-  integrations: [Sentry.replayIntegration()],
+  integrations: [
+    // Wallet addresses, balances, and SIWE messages may render in DOM —
+    // mask all text and block media to keep replays free of on-chain PII
+    Sentry.replayIntegration({
+      maskAllText: true,
+      blockAllMedia: true,
+    }),
+  ],
 
-  // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  tracesSampleRate: 1,
-  // Enable logs to be sent to Sentry
-  enableLogs: true,
-
-  // Define how likely Replay events are sampled.
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
+  tracesSampleRate: process.env.NODE_ENV === "development" ? 1.0 : 0.1,
   replaysSessionSampleRate: 0.1,
-
-  // Define how likely Replay events are sampled when an error occurs.
   replaysOnErrorSampleRate: 1.0,
 
-  // Enable sending user PII (Personally Identifiable Information)
-  // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/#sendDefaultPii
-  sendDefaultPii: true,
+  enableLogs: true,
+
+  sendDefaultPii: false,
+
+  // wagmi/RainbowKit surface user-cancelled wallet prompts as thrown errors;
+  // they are expected UX, not bugs
+  ignoreErrors: [
+    "UserRejectedRequestError",
+    "User rejected the request",
+    "User denied transaction signature",
+    "User rejected transaction",
+    "ConnectorNotFoundError",
+  ],
 })
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart
