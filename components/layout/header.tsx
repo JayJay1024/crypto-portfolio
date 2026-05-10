@@ -20,7 +20,7 @@ export function Header() {
           <Link href="/dashboard" className="text-lg font-bold">
             Crypto Portfolio
           </Link>
-          <nav className="flex items-center gap-4">
+          <nav className="hidden items-center gap-4 md:flex">
             {navItems.map((item) => (
               <Link
                 key={item.href}
