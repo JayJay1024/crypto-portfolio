@@ -4,6 +4,7 @@ import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TransactionTable } from "@/components/transactions/transaction-table"
 import { TransactionDialog } from "@/components/transactions/transaction-dialog"
+import { TransactionFilters } from "@/components/transactions/transaction-filters"
 import { useUIStore } from "@/lib/stores/ui-store"
 
 export default function TransactionsPage() {
@@ -18,7 +19,10 @@ export default function TransactionsPage() {
           <span className="hidden sm:inline">Add Transaction</span>
         </Button>
       </div>
-      <div className="mt-6">
+      <div className="mt-4">
+        <TransactionFilters />
+      </div>
+      <div className="mt-4">
         <TransactionTable />
       </div>
       <TransactionDialog />

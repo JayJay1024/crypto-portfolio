@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   useReactTable,
   getCoreRowModel,
@@ -32,6 +32,10 @@ export function TransactionTable() {
   const { coinFilter, typeFilter } = useUIStore()
   const [page, setPage] = useState(1)
   const [deleteId, setDeleteId] = useState<string | null>(null)
+
+  useEffect(() => {
+    setPage(1)
+  }, [coinFilter, typeFilter])
 
   const { data, isLoading } = useTransactions({
     coinId: coinFilter ?? undefined,
