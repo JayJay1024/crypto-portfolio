@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from "next"
 import { Geist_Mono, Inter } from "next/font/google"
+import { GoogleAnalytics } from "@next/third-parties/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ProvidersWrapper } from "@/components/providers-wrapper"
 import { cn } from "@/lib/utils"
+
+const gaId = process.env.NEXT_PUBLIC_GA_ID
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -53,6 +56,7 @@ export default function RootLayout({
           <ProvidersWrapper>{children}</ProvidersWrapper>
         </ThemeProvider>
       </body>
+      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   )
 }
