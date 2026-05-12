@@ -8,18 +8,26 @@ const STORAGE_KEY = "ga-consent-v1"
 
 type ConsentChoice = "granted" | "denied"
 
-function updateConsent(choice: ConsentChoice) {
+// Mirrors @next/third-parties' inline gtag helper: pushes the IArguments
+// object rather than a plain Array, which is the contract gtag.js documents
+// and what the package's own `sendGAEvent` does.
+function gtag(
+  _command: "consent",
+  _action: "update",
+  _signals: Record<string, ConsentChoice>
+) {
   window.dataLayer = window.dataLayer ?? []
-  window.dataLayer.push([
-    "consent",
-    "update",
-    {
-      ad_storage: choice,
-      ad_user_data: choice,
-      ad_personalization: choice,
-      analytics_storage: choice,
-    },
-  ])
+  // eslint-disable-next-line prefer-rest-params
+  window.dataLayer.push(arguments)
+}
+
+function updateConsent(choice: ConsentChoice) {
+  gtag("consent", "update", {
+    ad_storage: choice,
+    ad_user_data: choice,
+    ad_personalization: choice,
+    analytics_storage: choice,
+  })
 }
 
 export function ConsentBanner() {
