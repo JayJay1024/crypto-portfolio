@@ -68,6 +68,10 @@ export function TransactionTable() {
     onDelete: (id) => setDeleteId(id),
   })
 
+  // TanStack Table's `useReactTable()` isn't memoizable. We don't pass
+  // `table` into memoized children, so the compiler's auto-skip is sufficient
+  // — the rule is informational only here.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: data?.data ?? [],
     columns,

@@ -57,6 +57,10 @@ export function TransactionForm({ defaultValues }: TransactionFormProps) {
     },
   })
 
+  // React Hook Form's `watch()` isn't memoizable. We don't pass these values
+  // into memoized children, so the compiler's auto-skip is sufficient — the
+  // rule is informational only here.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const watchType = form.watch("type")
   const watchExchange = form.watch("exchange")
   const watchFeeUnit = form.watch("feeUnit")
