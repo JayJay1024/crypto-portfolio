@@ -10,10 +10,14 @@ type ConsentChoice = "granted" | "denied"
 
 // Mirrors @next/third-parties' inline gtag helper: pushes the IArguments
 // object rather than a plain Array, which is the contract gtag.js documents
-// and what the package's own `sendGAEvent` does.
+// and what the package's own `sendGAEvent` does. Params exist only for the
+// TypeScript signature — the body reads `arguments` directly.
 function gtag(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _command: "consent",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _action: "update",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _signals: Record<string, ConsentChoice>
 ) {
   window.dataLayer = window.dataLayer ?? []
@@ -45,6 +49,9 @@ export function ConsentBanner() {
     if (stored === "granted") {
       updateConsent("granted")
     } else if (stored === null) {
+      // Mount-detection: banner visibility depends on client-only storage,
+      // so we must read it after hydration and set state accordingly.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true)
     }
   }, [])

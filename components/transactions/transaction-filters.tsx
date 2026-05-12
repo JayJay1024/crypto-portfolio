@@ -12,7 +12,11 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import {
   Select,
   SelectContent,
@@ -91,9 +95,7 @@ export function TransactionFilters() {
                     <Check
                       className={cn(
                         "size-4",
-                        coinFilter === coin.coinId
-                          ? "opacity-100"
-                          : "opacity-0"
+                        coinFilter === coin.coinId ? "opacity-100" : "opacity-0"
                       )}
                     />
                     <span className="font-medium">
