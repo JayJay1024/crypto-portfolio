@@ -26,6 +26,7 @@ and per-coin PnL backed by CoinGecko prices.
 - **Charts** — Recharts
 - **Prices** — CoinGecko API (proxied through `/api/coins/*`)
 - **Monitoring** — Sentry (optional; opt-in via `NEXT_PUBLIC_SENTRY_DSN` / `SENTRY_DSN`)
+- **Analytics** — Google Analytics 4 via `@next/third-parties` (optional; opt-in via `NEXT_PUBLIC_GA_ID`), gated behind a Consent Mode v2 banner
 
 ## Getting Started
 
@@ -54,6 +55,7 @@ Arbitrum to sign in.
 | `NEXT_PUBLIC_SENTRY_DSN` | Optional. Browser DSN; leave blank to disable client error monitoring |
 | `SENTRY_DSN` | Optional. Server / edge runtime DSN; usually the same value as `NEXT_PUBLIC_SENTRY_DSN` |
 | `SENTRY_AUTH_TOKEN` | Build-time only. Required to upload source maps; set in CI / `.env.sentry-build-plugin` |
+| `NEXT_PUBLIC_GA_ID` | Optional. Google Analytics 4 Measurement ID (e.g. `G-XXXXXXXXXX`); leave blank to disable |
 
 ## Scripts
 

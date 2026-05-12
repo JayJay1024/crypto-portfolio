@@ -45,6 +45,11 @@ Next.js 16 app router project with React 19, TypeScript (strict), and Tailwind C
   - Client `ignoreErrors` filters wagmi/RainbowKit user-rejection errors (cancelled signatures aren't bugs); don't remove
   - Server `beforeSend` drops CoinGecko 429s (upstream throttle, not actionable); don't remove
   - Replay runs with `maskAllText` + `blockAllMedia` — don't relax without thinking through what gets recorded
+- **Analytics** — Opt-in: `<GoogleAnalytics>` and the consent default `<Script>` in `app/layout.tsx` only render when `NEXT_PUBLIC_GA_ID` is set. If "GA isn't recording events" — check env first, then check `localStorage.ga-consent-v1`. Deliberate choices:
+  - All four consent signals (`analytics_storage`, `ad_storage`, `ad_user_data`, `ad_personalization`) default to `denied`. Don't flip to `granted`; that defeats `components/consent-banner.tsx`.
+  - The consent default script uses `strategy="beforeInteractive"` so it queues into `dataLayer` before gtag.js loads. Don't drop the strategy or render it after `<GoogleAnalytics>`.
+  - `wait_for_update: 500` gives the banner's `useEffect` a 500ms window to push a stored `granted` update before GA sends its first pageview. Raising it improves recall on slow devices but delays every visitor's first event.
+  - `localStorage` key is versioned (`ga-consent-v1`). If you change the consent shape, bump the suffix so existing visitors re-prompt.
 
 ## Styling
 
