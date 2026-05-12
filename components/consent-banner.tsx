@@ -34,7 +34,14 @@ export function ConsentBanner() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY) as ConsentChoice | null
+    let stored: ConsentChoice | null
+    try {
+      stored = localStorage.getItem(STORAGE_KEY) as ConsentChoice | null
+    } catch {
+      // Storage blocked (Safari private mode, locked-down privacy contexts).
+      // Keep consent denied and the banner hidden — we can't persist a choice.
+      return
+    }
     if (stored === "granted") {
       updateConsent("granted")
     } else if (stored === null) {
@@ -46,7 +53,11 @@ export function ConsentBanner() {
 
   const choose = (choice: ConsentChoice) => {
     updateConsent(choice)
-    localStorage.setItem(STORAGE_KEY, choice)
+    try {
+      localStorage.setItem(STORAGE_KEY, choice)
+    } catch {
+      // Storage blocked — choice still applies for this session.
+    }
     setVisible(false)
   }
 
