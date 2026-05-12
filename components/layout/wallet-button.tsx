@@ -33,7 +33,9 @@ export function WalletButton({ size, className }: WalletButtonProps = {}) {
         return (
           <div
             aria-hidden={!ready}
-            className={!ready ? "pointer-events-none select-none opacity-0" : ""}
+            className={
+              !ready ? "pointer-events-none opacity-0 select-none" : ""
+            }
           >
             {(() => {
               if (!connected) {

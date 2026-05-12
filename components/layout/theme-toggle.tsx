@@ -18,6 +18,9 @@ export function ThemeToggle() {
   const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
+    // Mount-detection: theme is client-only, so we flip this flag after
+    // hydration to avoid rendering an SSR-mismatched icon/value.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
   }, [])
 
