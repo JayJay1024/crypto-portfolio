@@ -8,7 +8,7 @@ interface UIState {
     coinSymbol: string
     coinName: string
     type: "BUY" | "SELL"
-    exchange: "BINANCE" | "OKX" | "GATE" | "BITGET" | "CUSTOM"
+    exchange: "BINANCE" | "OKX" | "GATE" | "BITGET" | "HYPER" | "CUSTOM"
     exchangeCustom: string | null
     quantity: string
     price: string
