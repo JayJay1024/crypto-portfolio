@@ -13,6 +13,7 @@ const EXCHANGES = [
   { value: "OKX", label: "OKX" },
   { value: "GATE", label: "Gate" },
   { value: "BITGET", label: "Bitget" },
+  { value: "HYPER", label: "Hyper" },
   { value: "CUSTOM", label: "Custom" },
 ] as const
 

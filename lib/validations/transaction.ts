@@ -21,7 +21,7 @@ export const transactionSchema = z
     coinSymbol: z.string().min(1),
     coinName: z.string().min(1),
     type: z.enum(["BUY", "SELL"]),
-    exchange: z.enum(["BINANCE", "OKX", "GATE", "BITGET", "CUSTOM"]),
+    exchange: z.enum(["BINANCE", "OKX", "GATE", "BITGET", "HYPER", "CUSTOM"]),
     exchangeCustom: z.string().optional(),
     quantity: positiveNumberString,
     price: positiveNumberString,
